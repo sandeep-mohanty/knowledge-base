@@ -27,6 +27,7 @@ The repository is organized into topic-based folders:
 - `Essentials` – Core concepts and foundational knowledge
 - `General Knowledge` – Broader insights that support technical growth
 - `Identity` – Authentication, authorization, and identity management
+- `Microservices` – Microservices based cloud native architecture related information
 - `Personal` – Reflections, career learnings, and productivity strategies
 - `UI and Javascript Ecosystem` – Frontend development, frameworks, and tooling
 
