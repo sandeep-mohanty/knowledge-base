@@ -30,6 +30,7 @@ The repository is organized into topic-based folders:
 - `Microservices` – Microservices based cloud native architecture related information
 - `Personal` – Reflections, career learnings, and productivity strategies
 - `UI and Javascript Ecosystem` – Frontend development, frameworks, and tooling
+- `Testing and Validations` - Testing and validations related information
 
 Each folder contains Markdown files with concise, well-structured notes.
 
