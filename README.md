@@ -31,6 +31,7 @@ The repository is organized into topic-based folders:
 - `Personal` – Reflections, career learnings, and productivity strategies
 - `UI and Javascript Ecosystem` – Frontend development, frameworks, and tooling
 - `Testing and Validations` - Testing and validations related information
+- `Programming and Coding` - Related to programming and coding stuff.
 
 Each folder contains Markdown files with concise, well-structured notes.
 

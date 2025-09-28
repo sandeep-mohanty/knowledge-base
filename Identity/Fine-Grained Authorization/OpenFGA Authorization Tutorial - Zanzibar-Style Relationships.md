@@ -1,65 +1,76 @@
-# 🛡️ OpenFGA Authorization Tutorial: Zanzibar-Style Relationships
+# 🛡️ OpenFGA Authorization Tutorial: Zanzibar-Style Relationships (Extended Edition)
 
-[OpenFGA](https://openfga.dev) is an open-source fine-grained authorization system inspired by Google's Zanzibar. It is designed for high performance and scalability and is ideal for modern applications. This tutorial walks you through creating a Zanzibar-style authorization model using OpenFGA.
+[OpenFGA](https://openfga.dev) is an **open-source** fine-grained authorization system inspired by Google’s Zanzibar paper. It lets you model **who can access what** using a **graph of relationships (tuples)** between *users, resources, and permissions*.  
+
+Think of it as a **social graph for authorization**: just like Facebook models *friends, groups, and posts*, you model *users, groups, and resources*.
+
+---
+
+## 🖼️ The Mental Model (Diagram)
+
+Here’s the big picture:
+
+```plaintext
+                 ┌───────────────┐
+                 │    user:alice │
+                 └───────┬───────┘
+                         │
+         "member"        │
+                         │
+                 ┌───────▼───────┐
+                 │  group:devs   │
+                 └───────┬───────┘
+                         │ "editor"
+                         │
+                 ┌───────▼─────────┐
+                 │ document:doc1   │
+                 │ [editor,owner]  │
+                 └─────────────────┘
+
+```
+
+- Alice is a **member** of group:devs
+- devs group has **editor** rights on doc1
+- Therefore, Alice is transitively an **editor** of doc1
+
+That’s the Zanzibar “graph style” authorization.
 
 ---
 
 ## 📦 What is OpenFGA?
 
-OpenFGA (Fine-Grained Authorization) manages permissions by modeling relationships between users and resources. It supports logic such as:
+**OpenFGA** = “Fine-Grained Authorization”.
 
-- A user can `read` a document if they are a viewer, editor, or owner.
-- A user can `write` a document if they are an editor or owner.
+It lets you define:
 
-These relationships are defined in a **type system** and evaluated at runtime.
+- **Types:** user, document, folder, group, project, etc.
+- **Relations:** viewer, editor, member, owner, etc.
+- **Tuples:** `user bob is a viewer of document:doc1`
+- **Checks:** Is Alice allowed to `write` doc1?
+
+Instead of encoding ACL logic into your app, you offload relationship storage and **query evaluation** to OpenFGA.
 
 ---
 
 ## ✅ Prerequisites
 
-To follow along, make sure you have:
+- Install **Docker**
+- Run **OpenFGA server** locally:
+  ```bash
+  docker run --rm -p 8080:8080 openfga/openfga
+  ```
+  available at `http://localhost:8080`.
 
-- Docker installed
-- OpenFGA running locally (or use Auth0 FGA cloud)
-- [FGA CLI](https://github.com/openfga/cli) installed
-
-Install FGA CLI:
-
-```bash
-brew install openfga/tap/fga
-```
-
-Or download from GitHub Releases: https://github.com/openfga/cli/releases
+- Install **FGA CLI** (command-line tool):
+  ```bash
+  brew install openfga/tap/fga
+  ```
 
 ---
 
-## 🚀 Running OpenFGA Locally (Optional)
+## 🏗️ Step 1: Define an Authorization Model
 
-You can run OpenFGA using Docker:
-
-```bash
-docker run --rm -p 8080:8080 openfga/openfga
-```
-
-The service will be available at `http://localhost:8080`.
-
----
-
-## 🏗️ Step 1: Define the Authorization Model
-
-We will model a document-sharing system with users, groups, and documents.
-
-### 🧩 Model Overview
-
-- **Users** can be viewers, editors, or owners of documents.
-- **Groups** can contain users.
-- **Documents** have relationships to both users and groups.
-
----
-
-### 📝 Authorization Model Definition
-
-Save this as `model.json`:
+Create a file `model.json`:
 
 ```json
 {
@@ -70,9 +81,7 @@ Save this as `model.json`:
     {
       "type": "group",
       "relations": {
-        "member": {
-          "this": {}
-        }
+        "member": { "this": {} }
       }
     },
     {
@@ -82,7 +91,7 @@ Save this as `model.json`:
           "union": {
             "child": [
               { "this": {} },
-              { "computedUserset": { "relation": "member", "type": "group" } }
+              { "computedUserset": { "type": "group", "relation": "member" } }
             ]
           }
         },
@@ -90,24 +99,29 @@ Save this as `model.json`:
           "union": {
             "child": [
               { "this": {} },
-              { "computedUserset": { "relation": "member", "type": "group" } }
+              { "computedUserset": { "type": "group", "relation": "member" } }
             ]
           }
         },
-        "owner": {
-          "union": {
-            "child": [
-              { "this": {} },
-              { "computedUserset": { "relation": "member", "type": "group" } }
-            ]
-          }
-        }
+        "owner": { "this": {} }
       },
       "metadata": {
         "relations": {
-          "viewer": { "directly_related_user_types": [ { "type": "user" }, { "type": "group", "relation": "member" } ] },
-          "editor": { "directly_related_user_types": [ { "type": "user" }, { "type": "group", "relation": "member" } ] },
-          "owner": { "directly_related_user_types": [ { "type": "user" }, { "type": "group", "relation": "member" } ] }
+          "viewer": {
+            "directly_related_user_types": [
+              { "type": "user" }, { "type": "group", "relation": "member" }
+            ]
+          },
+          "editor": {
+            "directly_related_user_types": [
+              { "type": "user" }, { "type": "group", "relation": "member" }
+            ]
+          },
+          "owner": {
+            "directly_related_user_types": [
+              { "type": "user" }
+            ]
+          }
         }
       }
     }
@@ -115,46 +129,48 @@ Save this as `model.json`:
 }
 ```
 
-### 🔑 Define Permissions (in your app logic):
+---
+
+### 📝 Permissions in Application Logic
+
+OpenFGA doesn’t define permissions directly, you define **relations** and **derive permissions** in app logic:
 
 - `read = viewer OR editor OR owner`
 - `write = editor OR owner`
 - `manage = owner`
 
-OpenFGA does not define permissions explicitly — you compute them via relationships.
+This keeps OpenFGA focused on graphs, while your API decides the semantics.
 
 ---
 
 ## 📥 Step 2: Upload the Model
 
-Use the FGA CLI to upload the model:
-
 ```bash
 fga model create --file model.json
 ```
 
-Note the returned model ID — you'll need it for subsequent API calls.
+This returns a `model_id`. Remember it.
 
 ---
 
-## 🔗 Step 3: Create Relationship Tuples
+## 🔗 Step 3: Create Tuples (Relationships)
 
-Tuples define who has what access.
+Tuples = facts. Who can do what.
 
 ```bash
-# Alice is an editor of document:doc1
+# Alice is editor of doc1
 fga tuple write --user "user:alice" --relation "editor" --object "document:doc1"
 
-# Bob is a viewer
+# Bob is viewer
 fga tuple write --user "user:bob" --relation "viewer" --object "document:doc1"
 
-# Carol is the owner
+# Carol is owner
 fga tuple write --user "user:carol" --relation "owner" --object "document:doc1"
 
-# Add alice to group:devs
+# Alice is a member of devs
 fga tuple write --user "user:alice" --relation "member" --object "group:devs"
 
-# Grant group:devs editor access to doc1
+# Group devs is editor of doc1
 fga tuple write --user "group:devs" --relation "editor" --object "document:doc1"
 ```
 
@@ -162,66 +178,103 @@ fga tuple write --user "group:devs" --relation "editor" --object "document:doc1"
 
 ## 🔍 Step 4: Check Access
 
-To check if `alice` can `write` to `doc1`:
+Ask: *Does Alice have editor rights on doc1?*
 
 ```bash
 fga check --user "user:alice" --relation "editor" --object "document:doc1"
 ```
 
-To check if `bob` can `read` (you must check viewer, editor, AND owner):
+Ask: *Does Bob have read rights?*
+(because read = viewer OR editor OR owner):
 
 ```bash
 fga check --user "user:bob" --relation "viewer" --object "document:doc1"
 ```
 
-Repeat for `editor` and `owner` to fully simulate `read`.
+You can repeat for `editor` or `owner`.
 
 ---
 
 ## 🧪 Step 5: Explain Access
 
-Use the **explain** feature to understand *why* access is granted:
+Why does Alice have editor rights? Let’s see:
 
 ```bash
 fga explain --user "user:alice" --relation "editor" --object "document:doc1"
 ```
 
-This gives you a tree of relationships showing how access is derived.
+Output will show:
+
+- Alice → member of devs
+- devs → editor of document
+- therefore Alice → editor of document
+
+This lets you debug authorization graphs.
 
 ---
 
-## 🧰 Useful FGA CLI Commands
+## 🔄 Extra Example: Nested Resources
 
-- `fga model create --file model.json`
-- `fga tuple write --user <user> --relation <rel> --object <object>`
-- `fga check --user <user> --relation <rel> --object <object>`
-- `fga explain --user <user> --relation <rel> --object <object>`
-- `fga tuple list`
-- `fga store list`
-- `fga model list`
+Beyond documents, model **folders/projects**:
+
+```json
+{
+  "type": "folder",
+  "relations": {
+    "viewer": { "this": {} },
+    "editor": { "this": {} },
+    "owner": { "this": {} },
+    "parent": { "this": {} }
+  }
+}
+```
+
+- `folder:finance` is parent of `document:budget-report`
+- If you’re `viewer` of a folder, you inherit `viewer` of contained docs.
+
+This lets you scale Zanzibar logic across hierarchical systems.
+
+---
+
+## 🧰 Useful CLI Commands
+
+- `fga model create --file model.json` – upload model
+- `fga model list` – list models
+- `fga tuple write` – add relationships
+- `fga tuple list` – view stored tuples
+- `fga check` – check access
+- `fga explain` – why access is granted
+
+---
+
+## 🌟 Best Practices
+
+- **Keep permissions simple**: model as relations (`viewer`, `editor`, `owner`). Compute permissions in app code.
+- **Use groups for scaling**: instead of giving 100 users rights individually, put them in a group.
+- **Leverage explain**: always debug access graphs with `fga explain`.
+- **Hierarchies**: use “parent” relations to cascade permissions across folders/projects.
+- **Consistency**: keep `read`, `write`, `manage` logic consistent in your application layer.
 
 ---
 
 ## 🏁 Conclusion
 
-You’ve just built a Zanzibar-style authorization model using OpenFGA!
+We just built a Zanzibar-style auth model with OpenFGA:
 
-You learned how to:
-
-- Define a type system using JSON
-- Model relationships between users, groups, and documents
-- Check and explain access using tuple relationships
-- Build flexible access control logic in your app
+- Defined **types & relations**
+- Created **tuples** to model access graphs
+- Queried rights with `fga check`
+- Understood graph traversal with `fga explain`
+- Extended the model to nested resources
 
 ---
 
 ## 🔗 Resources
 
 - [OpenFGA Docs](https://openfga.dev/docs)
-- [FGA CLI GitHub](https://github.com/openfga/cli)
-- [Zanzibar Paper (by Google)](https://research.google/pubs/pub48190/)
-- [OpenFGA Playground](https://playground.openfga.dev/)
+- [Zanzibar Research Paper](https://research.google/pubs/pub48190/)
+- [FGA Playground (try before coding!)](https://playground.openfga.dev/)
 
 ---
 
-🛠️ Happy modeling with OpenFGA!
+🛠️ With OpenFGA, you’re not writing endless role-check if-statements. You’re building an **authorization graph** — scalable, debuggable, and elegant.

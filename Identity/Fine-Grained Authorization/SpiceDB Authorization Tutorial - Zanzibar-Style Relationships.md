@@ -1,12 +1,48 @@
-# 📘 SpiceDB Authorization Tutorial: Zanzibar-Style Relationships
+# 📘 SpiceDB Authorization Tutorial: Zanzibar-Style Relationships (Extended Edition)
 
-SpiceDB is an open-source database system inspired by Google's Zanzibar, purpose-built for managing complex authorization at scale. This tutorial will guide you through the basics of modeling permissions using SpiceDB’s schema language and Zanzibar-style relationships.
+SpiceDB is an **open-source fine-grained authorization database**, inspired by Google’s Zanzibar. It’s designed for apps that need **large-scale, flexible access control** across many users, groups, and resources.
+
+This tutorial will help you understand SpiceDB with **diagrams, step-by-step examples, and mental models**. By the end, you’ll not only know the commands but also truly *picture* how SpiceDB models access.
 
 ---
 
 ## 🧠 What is Zanzibar?
 
-Zanzibar is Google's global-scale authorization system used to manage permissions across services like Drive, YouTube, and Calendar. It introduces a relationship-based access control (ReBAC) model where access is granted based on explicit relationships between subjects (users) and resources (objects).
+Zanzibar is Google's global distributed authorization system used internally in services like Google Drive, YouTube, and Calendar. It introduced **Relationship-based Access Control (ReBAC)**, where **relationships** define access.
+
+Instead of saying *“Bob has role=viewer on doc1”*, Zanzibar defines relationships:
+
+```
+document:doc1#viewer@user:bob
+```
+
+This states: **user:bob is a viewer of document:doc1**.
+
+Access isn’t about static role checks. Instead, SpiceDB/ Zanzibar builds an **access graph**, and access is derived by walking connections.
+
+---
+
+## 📦 SpiceDB Mental Picture
+
+Here’s how to visualize SpiceDB:
+
+```plaintext
+   user:alice
+       │
+       │ member
+       ▼
+   group:devs
+       │
+       │ editor
+       ▼
+ document:doc1
+```
+
+- Alice is **member** of `group:devs`
+- `group:devs` is an **editor** of `document:doc1`
+- SpiceDB resolves this → Alice is transitively an **editor** of `doc1`.
+
+That’s the core magic: **relationship graph traversal**.
 
 ---
 
@@ -14,12 +50,10 @@ Zanzibar is Google's global-scale authorization system used to manage permission
 
 ### ✅ Prerequisites
 
-Before proceeding, make sure you have:
+- Docker: Run SpiceDB locally.
+- Zed CLI: Manage schemas, permissions, and relationships.
 
-- Docker installed (for running SpiceDB locally)
-- `zed` CLI installed (for managing schemas and relationships)
-
-You can install `zed` using:
+Install Zed CLI:
 
 ```bash
 curl -L https://github.com/authzed/zed/releases/latest/download/zed-$(uname -s)-$(uname -m) -o zed
@@ -29,17 +63,13 @@ sudo mv zed /usr/local/bin
 
 ---
 
-## 🏗️ Defining a Basic Authorization Model
+## 🏗️ Step 1: Write a Basic Schema
 
-Let's say you are building a document-sharing app. You want to model:
+Schemas define **resources (objects)**, **subjects (users/groups)**, and **how relations imply permissions**.
 
-- Users
-- Documents
-- Access levels: viewer, editor, owner
+➡ Example: document-sharing app.
 
-### ✍️ Step 1: Write the Schema
-
-Create a file called `schema.zed` with the following content:
+`schema.zed`
 
 ```zed
 definition user {}
@@ -55,38 +85,43 @@ definition document {
 }
 ```
 
-This schema defines:
-
-- `user` as a subject
-- `document` as an object that can have relations to users
-- Permissions (`read`, `write`, `manage`) derived from relationships
+### Explanation
+- **Relations**: link users to resources (`viewer: user`, `editor: user`).
+- **Permissions**: derive from relations.
+  - `read = viewer OR editor OR owner`
+  - `write = editor OR owner`
 
 ---
 
-## 📥 Step 2: Upload the Schema
+## 📥 Step 2: Upload Schema
 
 ```bash
 zed schema write --file schema.zed
 ```
 
-This command sends your schema to the SpiceDB instance.
+This installs the schema into SpiceDB.
+
+Use this to confirm:
+```bash
+zed schema read
+```
 
 ---
 
-## 🔗 Step 3: Create Relationships
+## 🔗 Step 3: Create Relationships (Tuples)
 
-Relationships are the core of Zanzibar-style authorization. They're stored as triples: **resource, relation, subject**.
+Relationships are stored as **triples: resource#relation@subject**.
 
-For example, to say user `alice` is an `editor` of document `doc1`:
+Examples:
 
 ```bash
+# alice is an editor of doc1
 zed relationship create document:doc1#editor@user:alice
-```
 
-Add more relationships:
-
-```bash
+# bob is a viewer
 zed relationship create document:doc1#viewer@user:bob
+
+# carol is the owner
 zed relationship create document:doc1#owner@user:carol
 ```
 
@@ -94,29 +129,30 @@ zed relationship create document:doc1#owner@user:carol
 
 ## 🔍 Step 4: Check Permissions
 
-To check if `bob` can `read` `doc1`:
+Ask SpiceDB: *Can this user do this thing?*
 
 ```bash
 zed permission check document:doc1 read user:bob
+# ✅ allowed, because bob is a viewer
 ```
-
-To check if `alice` can `write` `doc1`:
 
 ```bash
 zed permission check document:doc1 write user:alice
+# ✅ allowed, because alice is an editor
 ```
 
-To see all relationships:
-
 ```bash
-zed relationship list
+zed permission check document:doc1 manage user:bob
+# ❌ denied, only carol (owner) can manage
 ```
 
 ---
 
-## 🧠 Advanced Concept: Indirect Relationships
+## 🧠 Step 5: Indirect Relationships (Groups!)
 
-You can define more complex models. For example, users can belong to groups, and groups have access to documents:
+Let’s extend model: users can belong to groups, and groups can hold permissions.
+
+`schema.zed`
 
 ```zed
 definition group {
@@ -134,51 +170,119 @@ definition document {
 }
 ```
 
-Now, group members can be granted access via the group:
+### Tuples
 
 ```bash
-# Add alice to group devs
+# alice is a member of group devs
 zed relationship create group:devs#member@user:alice
 
-# Grant the group access to doc1
+# group devs is an editor of doc1
 zed relationship create document:doc1#editor@group:devs
 ```
 
----
-
-## 🧪 Testing Permissions with Expansion
-
-To see why a user has a permission, use the `expand` command:
-
+Now:
 ```bash
-zed permission expand document:doc1 read
+zed permission check document:doc1 write user:alice
+# ✅ allowed via group devs
 ```
 
-This shows the full tree of relationships contributing to the `read` permission.
+---
+
+## 🧪 Step 6: Explain Permissions with Expansion
+
+Want to see *why* Alice can write?
+
+```bash
+zed permission expand document:doc1 write
+```
+
+This shows a **tree of relationships**:
+
+```plaintext
+write
+ ├─ editor
+ │   └─ group:devs#member
+ │       └─ user:alice
+```
+
+So permissions aren’t a mystery — SpiceDB gives a clear explanation tree.
 
 ---
 
-## 🧰 Useful Commands
+## 🧰 Useful Zed CLI Commands
 
-- **Write Schema**: `zed schema write --file schema.zed`
-- **Read Schema**: `zed schema read`
-- **Create Relationship**: `zed relationship create <resource>#<relation>@<subject>`
-- **Delete Relationship**: `zed relationship delete <resource>#<relation>@<subject>`
-- **Check Permission**: `zed permission check <resource> <permission> <subject>`
-- **Expand Permission**: `zed permission expand <resource> <permission>`
-- **List Relationships**: `zed relationship list`
+- **Schemas**
+  - Write Schema → `zed schema write --file schema.zed`
+  - Read Schema → `zed schema read`
+
+- **Relationships**
+  - Create → `zed relationship create <resource>#<relation>@<subject>`
+  - Delete → `zed relationship delete <resource>#<relation>@<subject>`
+  - List → `zed relationship list`
+
+- **Permissions**
+  - Check → `zed permission check <resource> <permission> <subject>`
+  - Expand → `zed permission expand <resource> <permission>`
+
+---
+
+## 🌍 Example: Nested Hierarchies (Orgs > Projects > Docs)
+
+SpiceDB handles hierarchies like orgs/projects.
+
+```zed
+definition organization {
+  relation admin: user
+}
+
+definition project {
+  relation parent: organization
+  relation member: user
+}
+
+definition document {
+  relation parent: project
+  relation editor: user | project#member
+
+  permission write = editor + parent->member
+}
+```
+
+- If `organization` admin → inherits control over projects & docs.
+- If `project` member → automatically can edit docs in project.
+
+---
+
+## 📊 Diagram of Hierarchy
+
+```plaintext
+organization:acme#admin@user:carol
+       │
+       └── parent
+           │
+     project:billing#member@user:bob
+           │
+           └── parent
+               │
+          document:invoice123
+```
+
+Carol (org admin) gets top-level access;
+Bob (project member) gets doc edit rights via project-parent relation.
 
 ---
 
 ## 🏁 Conclusion
 
-This tutorial gave you a hands-on introduction to using SpiceDB with a Zanzibar-style authorization model. You learned how to:
+In this tutorial, you’ve learned:
 
-- Define resources, relationships, and permissions
-- Create and manage relationships
-- Check and debug permissions
+1. Define a **schema** with relations → permissions.
+2. Create **relationships** (subject-resource links).
+3. **Check** user permissions quickly.
+4. **Expand** permissions to **explain why** they’re granted.
+5. Scale up to **groups and nested hierarchies**.
 
-SpiceDB provides a scalable, flexible, and auditable way to implement fine-grained access control in your systems.
+SpiceDB lets you **model flexible, fine-grained authorization at scale** the Zanzibar way.
 
 ---
 
@@ -186,8 +290,9 @@ SpiceDB provides a scalable, flexible, and auditable way to implement fine-grain
 
 - [SpiceDB Documentation](https://authzed.com/docs/spicedb)
 - [Zed CLI GitHub](https://github.com/authzed/zed)
-- [Zanzibar Paper (by Google)](https://research.google/pubs/pub48190/)
+- [Zanzibar Paper](https://research.google/pubs/pub48190/)
+- [SpiceDB Playground](https://play.authzed.com)
 
 ---
 
-Happy modeling! 🛠️
+🚀 With SpiceDB, you’re not sprinkling `if(role == admin)` all over your code. Instead, you’re building a **centralized, graph-powered access model** that scales with your app.
