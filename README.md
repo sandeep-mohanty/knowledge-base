@@ -32,6 +32,7 @@ The repository is organized into topic-based folders:
 - `UI and Javascript Ecosystem` – Frontend development, frameworks, and tooling
 - `Testing and Validations` - Testing and validations related information
 - `Programming and Coding` - Related to programming and coding stuff.
+- `Local Setup` - Setup related notes and tutorials on the local machine
 
 Each folder contains Markdown files with concise, well-structured notes.
 
