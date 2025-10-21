@@ -35,7 +35,7 @@ C# has evolved dramatically in recent versions, bringing powerful functional pro
 - **Async Streams**: Processing asynchronous data sequences functionally
 
 ### Evolution of C# for Functional Programming:
-
+```csharp
     // C# 11+ allows for more concise, expressive functional code
 
     // Record types with primary constructor for immutability
@@ -72,13 +72,14 @@ C# has evolved dramatically in recent versions, bringing powerful functional pro
         Triangle { Points: [var p1, var p2, var p3] } => "Triangle with 3 points",
         _ => "Other shape"
     };
-
+```
 ## C# 11+ Features for Functional Programming
 
 C# 11 and later versions introduce several features that enhance functional programming capabilities.
 
 ### Raw String Literals
 
+```csharp
 Raw string literals make it easier to represent strings with special characters without escaping:
 
     // Raw string literals with triple quotes
@@ -96,9 +97,10 @@ Raw string literals make it easier to represent strings with special characters 
     Hello, {{name}}!
     Today is: {{DateTime.Now:yyyy-MM-dd}}
     """;
-
+```
 ### List Patterns
 
+```csharp
 List patterns allow matching against sequence elements:
 
     public static string AnalyzeSequence<T>(T[] sequence) => sequence switch
@@ -114,10 +116,11 @@ List patterns allow matching against sequence elements:
     Console.WriteLine(AnalyzeSequence(new[] { 1, 2, 3, 4, 5 })); 
     // "Sequence with first=1, last=5, and 3 items in between"
 
+```
 ### Static Abstract Members in Interfaces
 
 C# 11 introduces static abstract members in interfaces, enabling more functional abstractions:
-
+```csharp
     public interface IAddable<T> where T : IAddable<T>
     {
         static abstract T operator +(T left, T right);
@@ -152,11 +155,11 @@ C# 11 introduces static abstract members in interfaces, enabling more functional
     };
 
     var total = Sum(numbers); // ComplexNumber(9, 12)
-
+```
 ### Required Members
 
 The `required` modifier ensures properties must be initialized:
-
+```csharp
     public class ApiClient
     {
         public required string ApiKey { get; init; }
@@ -179,11 +182,11 @@ The `required` modifier ensures properties must be initialized:
         ApiKey = "your-api-key",
         BaseUrl = new Uri("https://api.example.com")
     };
-
+```
 ### UTF-8 String Literals
 
 C# 11 supports UTF-8 string literals for more efficient encoding:
-
+```csharp
     // UTF-8 string literal
     ReadOnlySpan<byte> utf8Hello = "Hello, world!"u8;
 
@@ -195,13 +198,13 @@ C# 11 supports UTF-8 string literals for more efficient encoding:
     using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.example.com");
     request.Content = new StringContent("""{"message":"Hello"}"""u8.ToArray(), 
         null, "application/json");
-
+```
 ## First-Class Functions with Modern Delegates
 
 C# treats functions as first-class citizens through delegates, lambdas, and recent enhancements.
 
 ### Modern Lambda Expressions
-
+```csharp
     // Lambda with inferred parameters and return type
     var add = (int a, int b) => a + b;
 
@@ -227,9 +230,9 @@ C# treats functions as first-class citizens through delegates, lambdas, and rece
     // Natural delegates
     var naturals = (int x, int y) => x + y;
     int result = naturals(5, 3); // 8
-
+```
 ### Modern Function Types
-
+```csharp
     // Newer patterns prefer Func/Action over custom delegates
     public class FunctionalProcessor
     {
@@ -266,11 +269,11 @@ C# treats functions as first-class citizens through delegates, lambdas, and rece
     // Usage
     var numbers = [1, 2, 3, 4, 5];
     var doubled = FunctionalProcessor.Map(numbers, x => x * 2);
-
+```
 ### Function Type Inference
 
 C# 11+ provides better type inference for delegates:
-
+```csharp
     // Better lambda inference
     var people = new List<Person>();
 
@@ -288,13 +291,13 @@ C# 11+ provides better type inference for delegates:
 
     // Type is inferred without specifying generic parameters
     var result = Apply(42, x => x.ToString());
-
+```
 ## Immutability in Modern C#
 
 Immutability (unchangeable state) is central to functional programming and well-supported in modern C#.
 
 ### Records for Immutable Reference Types
-
+```csharp
     // Basic record with primary constructor
     public record Person(string Name, int Age);
 
@@ -310,9 +313,9 @@ Immutability (unchangeable state) is central to functional programming and well-
     var olderAlice = alice with { Age = 31 };
     Console.WriteLine(alice.Age);     // 30 (original unchanged)
     Console.WriteLine(olderAlice.Age); // 31 (new instance)
-
+```
 ### Record Types with Additional Features
-
+```csharp
     // Record with additional members and validation
     public record User(string Username, string Email)
     {
@@ -336,9 +339,9 @@ Immutability (unchangeable state) is central to functional programming and well-
     // Record inheritance
     public record AdminUser(string Username, string Email, string[] Permissions)
         : User(Username, Email);
-
+```
 ### Record Structs
-
+```csharp
 Record structs are value types with record-like features:
 
     // Basic record struct
@@ -360,9 +363,9 @@ Record structs are value types with record-like features:
 
     // With-expressions work on record structs too
     var p3 = p2 with { X = 5 };
-
+```
 ### Immutable Collections
-
+```csharp
     using System.Collections.Immutable;
 
     // Create immutable collections
@@ -382,13 +385,13 @@ Record structs are value types with record-like features:
         ["one"] = 1,
         ["two"] = 2
     }.ToImmutableDictionary();
-
+```
 ## Pattern Matching Enhancements
 
 C# 11+ includes powerful pattern matching features that enable more functional code styles.
 
 ### Extended Property Patterns
-
+```csharp
     public record Address(string Street, string City, string Country);
     public record Customer(string Name, Address Address, bool IsVip);
 
@@ -402,9 +405,9 @@ C# 11+ includes powerful pattern matching features that enable more functional c
         { Name: var name } when name.StartsWith("A") => "Customer with name starting with A",
         _ => "Regular customer"
     };
-
+```
 ### List and Array Patterns
-
+```csharp
     // Pattern matching on arrays and lists
     public static string DescribeList<T>(List<T> items) => items switch
     {
@@ -424,9 +427,9 @@ C# 11+ includes powerful pattern matching features that enable more functional c
         double[] => "Double array",
         _ => "Other array type"
     };
-
+```
 ### Extended Type Patterns
-
+```csharp
     // Type patterns with additional constraints
     public static string ProcessValue(object value) => value switch
     {
@@ -440,9 +443,9 @@ C# 11+ includes powerful pattern matching features that enable more functional c
         System.IO.Stream => "Stream object",
         _ => "Unknown type"
     };
-
+```
 ### Relational Patterns
-
+```csharp
     // Relational patterns for numeric comparisons
     public static string GradeScore(int score) => score switch
     {
@@ -462,13 +465,13 @@ C# 11+ includes powerful pattern matching features that enable more functional c
         >= 25 and < 35 => "Hot",
         >= 35 => "Very hot"
     };
-
+```
 ## Records and Record Structs
 
 Records and record structs are ideal for functional programming as they enable immutable data modeling.
 
 ### Advanced Record Features
-
+```csharp
     // Positional and nominal record syntax
     public record Product(int Id, string Name, decimal Price)
     {
@@ -505,9 +508,9 @@ Records and record structs are ideal for functional programming as they enable i
         (_, _, < 50) => "Budget item",
         _ => "Regular product"
     };
-
+```
 ### Sealed and Unsealed Records
-
+```csharp
     // Base record
     public record Vehicle(string Make, string Model, int Year);
 
@@ -530,9 +533,9 @@ Records and record structs are ideal for functional programming as they enable i
         Car { Doors: 4 } => "Sedan",
         _ => "Other vehicle"
     };
-
+```
 ### Performance-Focused Record Structs
-
+```csharp
     // Regular record struct
     public record struct Coordinate(double X, double Y);
 
@@ -554,13 +557,13 @@ Records and record structs are ideal for functional programming as they enable i
     var v1 = new Vector3D(1, 2, 3);
     var v2 = new Vector3D(4, 5, 6);
     var v3 = v1 + v2 * 2; // Vector3D(9, 12, 15)
-
+```
 ## Required Properties and Init-Only Setters
 
 Modern C# enables immutability while ensuring proper initialization of objects.
 
 ### Init-Only Properties
-
+```csharp
     // Class with init-only properties
     public class ImmutableConfiguration
     {
@@ -586,9 +589,9 @@ Modern C# enables immutability while ensuring proper initialization of objects.
 
     // Cannot modify after initialization
     // config.Timeout = TimeSpan.FromSeconds(90); // Compilation error
-
+```
 ### Required Properties
-
+```csharp
     // Class with required properties
     public class ApiConfiguration
     {
@@ -632,9 +635,9 @@ Modern C# enables immutability while ensuring proper initialization of objects.
             DatabaseName = database;
         }
     }
-
+```
 ### Validation with Required Properties
-
+```csharp
     // Combining required properties with validation
     public class EmailMessage
     {
@@ -679,13 +682,13 @@ Modern C# enables immutability while ensuring proper initialization of objects.
     {
         Console.WriteLine($"Validation error: {ex.Message}");
     }
-
+```
 ## Modern Function Composition
 
 Functional programming emphasizes composing small functions to build complex operations.
 
 ### Pipe Operator Simulation
-
+```csharp
     // Pipeline extension method
     public static class PipelineExtensions
     {
@@ -717,9 +720,9 @@ Functional programming emphasizes composing small functions to build complex ope
         .Pipe(s => s + ", WORLD!")        // "HELLO, WORLD!"
         .Pipe(s => s.Length)              // 13
         .Pipe(n => $"Length is {n}");     // "Length is 13"
-
+```
 ### Functional Composition with Generic Extensions
-
+```csharp
     // Generic composition utilities
     public static class FunctionalExtensions
     {
@@ -761,9 +764,9 @@ Functional programming emphasizes composing small functions to build complex ope
     // Partial application
     Func<int, int> add5 = add.PartialApply(5);
     Console.WriteLine(add5(10));  // 15
-
+```
 ### Practical Pipeline Example
-
+```csharp
     // Processing pipeline for data transformation
     public static class UserProcessor
     {
@@ -808,13 +811,13 @@ Functional programming emphasizes composing small functions to build complex ope
         public required string Name { get; init; }
         public required string Email { get; init; }
     }
-
+```
 ## Collection Expressions
 
 C# 12 introduces collection expressions, a concise syntax for creating and initializing collections.
 
 ### Basic Collection Expressions
-
+```csharp
     // Create arrays with collection expressions
     int[] numbers = [1, 2, 3, 4, 5];
     string[] words = ["hello", "world"];
@@ -830,9 +833,9 @@ C# 12 introduces collection expressions, a concise syntax for creating and initi
     // Mix collection expressions
     int[] combined = [.. numbers, 6, 7, .. [8, 9, 10]];
     // Result: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
+```
 ### Functional Patterns with Collection Expressions
-
+```csharp
     // Function that generates a range
     public static int[] Range(int start, int count)
     {
@@ -862,9 +865,9 @@ C# 12 introduces collection expressions, a concise syntax for creating and initi
         "user3",
         .. (includeAdmins ? ["admin1", "admin2"] : [])
     ];
-
+```
 ### Creating Custom Collection Types
-
+```csharp
     // Create a custom collection type
     public class OrderedSet<T> : ICollection<T>
     {
@@ -914,13 +917,13 @@ C# 12 introduces collection expressions, a concise syntax for creating and initi
     // Using custom collection with collection expression
     OrderedSet<string> uniqueNames = ["Alice", "Bob", "Alice", "Charlie"];
     // Contains: "Alice", "Bob", "Charlie" (duplicates removed while preserving order)
-
+```
 ## Asynchronous Programming Fundamentals
 
 Asynchronous programming is essential in modern C# applications for better resource utilization.
 
 ### Modern Async/Await Pattern
-
+```csharp
     // Basic async method pattern
     public async Task<string> DownloadWebpageAsync(string url)
     {
@@ -944,9 +947,9 @@ Asynchronous programming is essential in modern C# applications for better resou
             Console.WriteLine($"Download failed: {ex.Message}");
         }
     }
-
+```
 ### Async Method Return Types
-
+```csharp
     // Task - for asynchronous operations without a return value
     public async Task SaveLogAsync(string message)
     {
@@ -982,9 +985,9 @@ Asynchronous programming is essential in modern C# applications for better resou
         _cache[key] = value;
         return value;
     }
-
+```
 ### Modern Error Handling with Async
-
+```csharp
     // Multiple exception handling with async/await
     public async Task<string> FetchUserDataAsync(string userId)
     {
@@ -1021,9 +1024,9 @@ Asynchronous programming is essential in modern C# applications for better resou
             throw new UserDataFetchException("Network error while fetching user data", ex);
         }
     }
-
+```
 ### Task Continuation
-
+```csharp
     // Modern task continuation with async/await
     public async Task ProcessOrderAsync(Order order)
     {
@@ -1056,13 +1059,13 @@ Asynchronous programming is essential in modern C# applications for better resou
         
         return await databaseTask;
     }
-
+```
 ## Task-based Asynchronous Pattern
 
 The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony in C#.
 
 ### Task Creation and Composition
-
+```csharp
     // Creating tasks
     public async Task DemonstrateTaskCreationAsync()
     {
@@ -1089,9 +1092,9 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
         int result = await calculationTask;
         Console.WriteLine($"Result: {result}");
     }
-
+```
 ### Modern Task Combinators
-
+```csharp
     // Task.WhenAll - run multiple tasks in parallel
     public async Task<IEnumerable<string>> DownloadMultiplePagesAsync(IEnumerable<string> urls)
     {
@@ -1116,9 +1119,9 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
         await Task.Delay(delay);
         return $"Result from {source}";
     }
-
+```
 ### Functional Error Handling with Tasks
-
+```csharp
     // Result type for functional error handling
     public class Result<TSuccess, TFailure>
     {
@@ -1180,13 +1183,13 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
         
         Console.WriteLine(message);
     }
-
+```
 ## ValueTask and Performance Optimization
 
 `ValueTask<T>` optimizes asynchronous code by eliminating allocations in specific scenarios.
 
 ### When to Use ValueTask
-
+```csharp
     // Task<T> creates an allocation even when result is immediate
     public Task<int> GetValueTaskAsync()
     {
@@ -1222,9 +1225,9 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
         _cache[key] = result;
         return result;
     }
-
+```
 ### ValueTask Performance Considerations
-
+```csharp
     // IMPORTANT: ValueTask should only be awaited once
     public async Task DemonstrateValueTaskUsageAsync()
     {
@@ -1252,9 +1255,9 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
         await Task.Delay(100);
         return 42;
     }
-
+```
 ### Combining ValueTask with Other Optimizations
-
+```csharp
     // Optimized caching service
     public class CachingService
     {
@@ -1322,13 +1325,13 @@ The Task-based Asynchronous Pattern (TAP) is the modern approach to asynchrony i
             }
         }
     }
-
+```
 ## Combining Functional Patterns with Async
 
 Modern C# allows elegant combinations of functional programming and asynchronous execution.
 
 ### Async Function Composition
-
+```csharp
     // Extension methods for async function composition
     public static class AsyncFunctionalExtensions
     {
@@ -1389,9 +1392,9 @@ Modern C# allows elegant combinations of functional programming and asynchronous
         public decimal TotalAmount { get; init; }
         public DateTime? LastOrderDate { get; init; }
     }
-
+```
 ### Railway-Oriented Programming with Async
-
+```csharp
     // Extension methods for Railway-oriented async programming
     public static class AsyncResultExtensions
     {
@@ -1504,13 +1507,13 @@ Modern C# allows elegant combinations of functional programming and asynchronous
         public required decimal Amount { get; init; }
         public DateTime OrderDate { get; init; } = DateTime.UtcNow;
     }
-
+```
 ## Asynchronous Streams
 
 C# 8.0+ supports async streams for handling asynchronous sequences of data efficiently.
 
 ### Basic Async Streams
-
+```csharp
     // Generate an async stream of data
     public static async IAsyncEnumerable<int> GenerateNumbersAsync(
         int count, 
@@ -1531,9 +1534,9 @@ C# 8.0+ supports async streams for handling asynchronous sequences of data effic
             Console.WriteLine($"Received: {number}");
         }
     }
-
+```
 ### LINQ-Style Operations on Async Streams
-
+```csharp
     // Extension methods for IAsyncEnumerable<T>
     public static class AsyncEnumerableExtensions
     {
@@ -1616,9 +1619,9 @@ C# 8.0+ supports async streams for handling asynchronous sequences of data effic
             Console.WriteLine($"Processed value: {number}");
         }
     }
-
+```
 ### Real-World Async Stream Example
-
+```csharp
     // Database repository with async streams
     public class ProductRepository
     {
@@ -1713,13 +1716,13 @@ C# 8.0+ supports async streams for handling asynchronous sequences of data effic
         
         Console.WriteLine($"Processed {count} products with total value: ${totalValue}");
     }
-
+```
 ## Parallel Processing with PLINQ and PFX
 
 For CPU-bound operations, combining functional programming with parallelism is powerful.
 
 ### PLINQ for Parallel Data Processing
-
+```csharp
     // Basic PLINQ
     public void DemonstratePlinq()
     {
@@ -1747,9 +1750,9 @@ For CPU-bound operations, combining functional programming with parallelism is p
             .WithDegreeOfParallelism(Environment.ProcessorCount)
             .Where(n => n % 2 == 0);
     }
-
+```
 ### Parallel ForEach with Functional Style
-
+```csharp
     // Parallel processing with functional approach
     public async Task ProcessImagesInParallelAsync(string[] imagePaths)
     {
@@ -1794,9 +1797,9 @@ For CPU-bound operations, combining functional programming with parallelism is p
                 }
             });
     }
-
+```
 ### Task Parallel Library with Functional Approaches
-
+```csharp
     // Parallel processing with TPL Dataflow
     public async Task ProcessDataWithDataflowAsync(IEnumerable<string> inputs)
     {
@@ -1861,13 +1864,13 @@ For CPU-bound operations, combining functional programming with parallelism is p
         public required string Source { get; init; }
         public required int Value { get; init; }
     }
-
+```
 ## Functional Error Handling with Tasks
 
 Functional approaches to error handling are particularly valuable in asynchronous code.
 
 ### Option Pattern with Tasks
-
+```csharp
     // Option type for nullable values
     public class Option<T>
     {
@@ -1955,9 +1958,9 @@ Functional approaches to error handling are particularly valuable in asynchronou
         
         Console.WriteLine(message);
     }
-
+```
 ### Either/Result Pattern with Tasks
-
+```csharp
     // Result type for operations that might fail
     public class Result<TSuccess, TFailure>
     {
@@ -2144,13 +2147,13 @@ Functional approaches to error handling are particularly valuable in asynchronou
         public required decimal Amount { get; init; }
         public required string Status { get; init; }
     }
-
+```
 ## Real-World Applications
 
 Putting everything together in real-world scenarios.
 
 ### Functional API Client
-
+```csharp
     // Functional REST API client
     public class FunctionalApiClient
     {
@@ -2296,9 +2299,9 @@ Putting everything together in real-world scenarios.
     }
 
     public record CreateUserRequest(string Name, string Email);
-
+```
 ### Functional Event Processing System
-
+```csharp
     // Event processing pipeline using functional patterns
     public class EventProcessor
     {
@@ -2480,11 +2483,11 @@ Putting everything together in real-world scenarios.
             Console.WriteLine(message);
         }
     }
-
+```
 ## Best Practices
 
 ### 1. Embrace Immutability
-
+```csharp
     // Bad: Mutable state
     public class MutableOrder
     {
@@ -2525,9 +2528,9 @@ Putting everything together in real-world scenarios.
         public required decimal Price { get; init; }
         public required int Quantity { get; init; }
     }
-
+```
 ### 2. Prefer Expression-Bodied Members
-
+```csharp
     // Traditional methods and properties
     public class TraditionalClass
     {
@@ -2569,9 +2572,9 @@ Putting everything together in real-world scenarios.
         // Expression-bodied method with multiple statements
         public string GetDescription() => $"{_value} squared is {Square}";
     }
-
+```
 ### 3. Use Pattern Matching for Control Flow
-
+```csharp
     // Traditional approach with if/else
     public string DescribePersonTraditional(Person person)
     {
@@ -2612,9 +2615,9 @@ Putting everything together in real-world scenarios.
         { FirstPurchaseDate: var d } when d < DateTime.Now.AddYears(-1) => "Anniversary discount",
         _ => "No discount"
     };
-
+```
 ### 4. Compose Async Functions for Clarity
-
+```csharp
     // Bad: Nested callbacks create "callback hell"
     public async Task ProcessUserBadAsync(int userId)
     {
@@ -2681,9 +2684,9 @@ Putting everything together in real-world scenarios.
             error => Console.WriteLine($"Error: {error}")
         );
     }
-
+```
 ### 5. Use Async Streams for Large Datasets
-
+```csharp
     // Bad: Loading everything into memory
     public async Task<List<OrderSummary>> GetAllOrdersSummaryBadAsync()
     {
@@ -2735,9 +2738,9 @@ Putting everything together in real-world scenarios.
                              $"{summary.TotalItems} items, ${summary.TotalAmount}");
         }
     }
-
+```
 ### 6. Implement Async Interfaces Correctly
-
+```csharp
     // Defining async interfaces
     public interface IUserRepository
     {
@@ -2806,9 +2809,9 @@ Putting everything together in real-world scenarios.
             }
         }
     }
-
+```
 ### 7. Avoid Async Void Methods
-
+```csharp
     // Bad: async void method
     public async void ProcessDataVoid(string filePath)
     {
@@ -2854,9 +2857,9 @@ Putting everything together in real-world scenarios.
             Console.WriteLine($"Processing failed: {ex.Message}");
         }
     }
-
+```
 ### 8. Use Functional Error Handling
-
+```csharp
     // Traditional exception-based approach
     public async Task<Order> PlaceOrderTraditionalAsync(OrderRequest request)
     {
@@ -2965,3 +2968,4 @@ Putting everything together in real-world scenarios.
         Database,
         System
     }
+    ```
