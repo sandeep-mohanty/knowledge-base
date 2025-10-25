@@ -4,7 +4,7 @@
 
 Important
 
-Effective May 1, 2025, Azure AD B2C will no longer be available to purchase for new customers. [Learn more in our FAQ](faq#azure-ad-b2c-end-of-sale).
+> Effective May 1, 2025, Azure AD B2C will no longer be available to purchase for new customers. [Learn more in our FAQ](faq#azure-ad-b2c-end-of-sale).
 
 Azure Active Directory B2C (Azure AD B2C) provides support for the SAML 2.0 identity provider. This article describes the specifics of a technical profile for interacting with a claims provider that supports this standardized protocol. With a SAML technical profile you can federate with a SAML-based identity provider, such as [ADFS](identity-provider-adfs) and [Salesforce](identity-provider-salesforce-saml). This federation allows your users to sign in with their existing social or enterprise identities.
 
