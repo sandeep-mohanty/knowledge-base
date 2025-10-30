@@ -164,10 +164,8 @@ Here is an example of a table you can fill during load testing:
 -   **Avg t** – the average of response time
 -   **Error rate** – how many requests fail during the processing
 -   **p95 t (ms)** – the 95th percentile of response time in milliseconds. This means 95% of requests were faster than this value, and it's a key indicator of user experience.
--   Other metrics – specific metrics to make an informed decision
+-   **Other metrics** – specific metrics to make an informed decision
 
 ## Conclusion
 
 Performance testing can seem daunting, but by starting with a clear goal and taking a structured approach, you can systematically improve your application's reliability. It's not about passing or failing; it's about learning how your system behaves under pressure and making it better. Start small, iterate, and you'll build an application that can stand up to real-world demand.
-
-Opinions expressed by DZone contributors are their own.
