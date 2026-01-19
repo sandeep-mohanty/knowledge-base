@@ -79,10 +79,11 @@ Run the wrapper task to upgrade to the latest stable Gradle version:
 
 ### Option B: Upgrade to Specific Version
 
-If you prefer a specific version (e.g., Gradle 9.2.0):
+If you prefer a specific version (e.g., Gradle 9.2.1):
 
 ```bash
-./gradlew wrapper --gradle-version 9.2.0
+./gradlew wrapper --gradle-version 9.2.1
+./gradlew wrapper --gradle-distribution-url "https://your-artifactory-url/gradle-9.2.1-bin.zip"
 ./gradlew wrapper
 ```
 
