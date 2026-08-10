@@ -53,4 +53,3 @@ This repository is not licensed for public use or redistribution. All content is
 ---
 
 > _“Knowledge is power. Documentation is leverage.”_
-

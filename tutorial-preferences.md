@@ -9,7 +9,7 @@ This file documents your preferences for creating tutorials from content. Refere
 - [x] Conceptual explanation with diagrams
 - [x] Hands-on guide with practical exercises
 - [ ] Quick reference guide
-- [x] Comprehensive deep-dive
+- [x] Comprehensive deep-dive (MANDATORY for all tutorials)
 - [x] Other: Detailed, tutorial-style documents that are easy to follow, visually engaging with Mermaid diagrams, and enriched with real-world examples
 
 **Target Audience Level:**
@@ -27,18 +27,20 @@ This file documents your preferences for creating tutorials from content. Refere
 
 ## Standard Structure
 
-Preferred tutorial structure (check all that apply):
+**All tutorials MUST be comprehensive deep dives and include the following sections:**
+
+### Required Sections (All Mandatory):
 - [x] Introduction / Overview (with improved title if needed)
 - [x] Prerequisites
 - [x] Learning Objectives
 - [x] Step-by-step instructions
 - [x] Code examples with explanations
-- [x] Diagrams / Visual aids (Mermaid diagrams)
+- [x] Diagrams / Visual aids (Mermaid diagrams - minimum 3 diagrams)
 - [x] Common pitfalls / Troubleshooting
 - [x] Summary / Key takeaways
 - [x] Further reading / Resources
-- [x] Practice exercises
-- [x] Question bank for knowledge reinforcement
+- [x] Practice exercises (minimum 3 exercises with detailed solutions)
+- [x] Question bank for knowledge reinforcement (minimum 50 questions)
 - [x] Real-world examples and use cases
 - [x] Best practices
 - [x] Anti-patterns
@@ -46,6 +48,8 @@ Preferred tutorial structure (check all that apply):
 - [x] Security considerations (where applicable)
 - [x] Testing strategies
 - [x] Migration guides (if applicable)
+
+### Optional Sections:
 - [ ] Other: _______________
 
 ## Content Guidelines
@@ -132,20 +136,20 @@ Preferred tutorial structure (check all that apply):
 - Avoid unnecessary fluff or padding
 
 **Special Requirements:**
-- Always include real-world examples: [x] Yes
+- Always include real-world examples: [x] Yes (MANDATORY)
 - Include comparison tables: [x] Yes
-- Include best practices section: [x] Yes
-- Include anti-patterns section: [x] Yes
-- Include practice exercises: [x] Yes
-- Include question bank: [x] Yes
-- Use Mermaid diagrams for architecture, flow, and concept visualization: [x] Yes
-- Make content visually engaging: [x] Yes
-- Easy to follow structure: [x] Yes
-- Enrich with practical use cases: [x] Yes
-- Include troubleshooting guides: [x] Yes
+- Include best practices section: [x] Yes (MANDATORY)
+- Include anti-patterns section: [x] Yes (MANDATORY)
+- Include practice exercises: [x] Yes (MANDATORY - minimum 3 exercises with solutions)
+- Include question bank: [x] Yes (MANDATORY - minimum 50 questions)
+- Use Mermaid diagrams for architecture, flow, and concept visualization: [x] Yes (MANDATORY - minimum 3 diagrams)
+- Make content visually engaging: [x] Yes (MANDATORY)
+- Easy to follow structure: [x] Yes (MANDATORY)
+- Enrich with practical use cases: [x] Yes (MANDATORY)
+- Include troubleshooting guides: [x] Yes (MANDATORY)
 - Include performance benchmarks where relevant: [x] Yes
-- Include security considerations: [x] Yes
-- Provide multiple implementation approaches: [x] Yes
+- Include security considerations: [x] Yes (MANDATORY where applicable)
+- Provide multiple implementation approaches: [x] Yes (MANDATORY)
 
 ## Visual Elements
 
@@ -173,13 +177,13 @@ Preferred tutorial structure (check all that apply):
 ## Learning Enhancement
 
 **Knowledge Reinforcement:**
-- [x] Include practice exercises with solutions
-- [x] Provide question bank (minimum 10 questions)
-- [x] Include "Test Your Understanding" sections
-- [x] Add "Common Interview Questions" where relevant
-- [x] Provide self-assessment checklists
-- [x] Include hands-on labs or projects
-- [x] Add "Pro Tips" sections for advanced insights
+- [x] Include practice exercises with solutions (MANDATORY - minimum 3 exercises)
+- [x] Provide question bank (minimum 50 questions) (MANDATORY)
+- [x] Include "Test Your Understanding" sections (MANDATORY - minimum 10 questions)
+- [x] Add "Common Interview Questions" where relevant (MANDATORY - minimum 10 questions)
+- [x] Provide self-assessment checklists (MANDATORY)
+- [x] Include hands-on labs or projects (MANDATORY)
+- [x] Add "Pro Tips" sections for advanced insights (MANDATORY)
 
 **Progressive Learning:**
 - [x] Start with fundamentals before advanced topics
@@ -234,12 +238,34 @@ Here's an example of how this might look when filled out:
 3. Provide the content you want converted
 4. I'll read this file and create the tutorial according to your specifications
 
-**Note on Deep Dive Tutorials:** Always ask if you prefer a deep dive style tutorial before proceeding.
+**Note on Deep Dive Tutorials:** ALL tutorials must be comprehensive deep dives by default. Deep dive format is MANDATORY for all tutorials. Do not create quick reference guides or summary documents.
 
-**Note on Practice Exercises & Question Bank:** Always include practice exercises and a question bank in tutorials. Before creating these sections, ask the user if they would like them included in the current tutorial.
+**Note on Practice Exercises & Question Bank:** Practice exercises and question banks are MANDATORY for all tutorials. Include these sections in every tutorial without exception. Minimum requirements:
+- Practice exercises: At least 3 exercises with detailed solutions
+- Question bank: Minimum 50 questions covering different difficulty levels (beginner, intermediate, advanced)
+- "Test Your Understanding" section: Minimum 10 questions
+- "Common Interview Questions" section: Minimum 10 questions
 
 **Note on Content Augmentation:** I will research and augment the provided content with additional insights, examples, and best practices while staying within the topic's scope. All additions will be clearly relevant and enhance the learning experience.
 
 **Note on Quality:** I will ensure all code examples are tested, all information is accurate and up-to-date, and the tutorial follows industry best practices for technical documentation.
 
-**Last Updated:** _______________
+**Last Updated:** 2026-01-09
+
+## Mandatory Requirements Checklist
+
+Every tutorial MUST meet ALL of the following requirements:
+
+- [x] Tutorial is a comprehensive deep dive (not a quick reference or summary)
+- [x] Question bank included with minimum 50 questions
+- [x] Practice exercises included with solutions (minimum 3 exercises)
+- [x] "Test Your Understanding" section present (minimum 10 questions)
+- [x] "Common Interview Questions" section present (minimum 10 questions)
+- [x] At least 3 Mermaid diagrams included
+- [x] Real-world examples and use cases documented
+- [x] Best practices section included
+- [x] Anti-patterns section included
+- [x] Troubleshooting guide included
+- [x] Security considerations included (where applicable)
+- [x] Performance considerations included
+- [x] Multiple implementation approaches provided
