@@ -254,16 +254,16 @@ if ($process) {
 
 ```mermaid
 graph LR
-    subgraph "Bash: Text Pipeline"
-    A1[ps -ef] -->|Plain Text| B1[grep nginx]
-    B1 -->|Filtered Text| C1[awk '{print $2}']
-    C1 -->|Text Output| D1[User]
+    subgraph Bash: Text Pipeline
+        A1["ps -ef"] -->|Plain Text| B1["grep nginx"]
+        B1 -->|Filtered Text| C1["awk '{print $2}'"]
+        C1 -->|Text Output| D1["User"]
     end
     
-    subgraph "PowerShell: Object Pipeline"
-    A2[Get-Process] -->|Process Objects| B2[Where-Object]
-    B2 -->|Filtered Objects| C2[Select-Object]
-    C2 -->|Structured Objects| D2[User]
+    subgraph PowerShell: Object Pipeline
+        A2["Get-Process"] -.->|Process Objects| B2["Where-Object"]
+        B2 -.->|Filtered Objects| C2["Select-Object"]
+        C2 -.->|Structured Objects| D2["User"]
     end
     
     style A1 fill:#ffe1e1

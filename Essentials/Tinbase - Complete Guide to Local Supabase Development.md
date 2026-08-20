@@ -156,34 +156,34 @@ Tinbase's architecture is elegantly simple yet powerful. At its core, every serv
 
 ```mermaid
 graph TB
-    subgraph "Client Layer"
-        SDK[Supabase JS SDK]
-        Browser[Browser App]
-        Mobile[Mobile App]
+    subgraph Client Layer
+        SDK["Supabase JS SDK"]
+        Browser["Browser App"]
+        Mobile["Mobile App"]
     end
 
-    subgraph "Tinbase Core"
-        Handler[Request Handler<br/>(Request) => Response]
+    subgraph Tinbase Core
+        Handler["Request Handler<br/>(Request) => Response"]
         
-        subgraph "Service Layer"
-            REST[PostgREST<br/>REST API]
-            Auth[GoTrue<br/>Authentication]
-            Storage[Storage Service]
-            Realtime[Realtime<br/>WebSocket]
-            Functions[Edge Functions]
-            Studio[Studio Admin]
+        subgraph Service Layer
+            REST["PostgREST<br/>REST API"]
+            Auth["GoTrue<br/>Authentication"]
+            Storage["Storage Service"]
+            Realtime["Realtime<br/>WebSocket"]
+            Functions["Edge Functions"]
+            Studio["Studio Admin"]
         end
         
-        subgraph "Database Layer"
-            Engine[DbEngine Adapter]
+        subgraph Database Layer
+            Engine["DbEngine Adapter"]
         end
     end
 
-    subgraph "Engine Options"
-        Native[Native<br/>Postgres 17]
-        WASM[WASM<br/>PGlite]
-        PgMem[pgmem<br/>In-Memory]
-        External[External<br/>PostgreSQL]
+    subgraph Engine Options
+        Native["Native<br/>Postgres 17"]
+        WASM["WASM<br/>PGlite"]
+        PgMem["pgmem<br/>In-Memory"]
+        External["External<br/>PostgreSQL"]
     end
 
     SDK --> Handler

@@ -404,14 +404,14 @@ graph LR
     C --> E[Simple Entities]
     D --> F[Complex Business Logic]
     
-    E --> G[✅ Recommended]
-    F --> H[When Needed]
+    E --> G["✅ Recommended"]
+    F --> H["When Needed"]
     
-    G --> I[Always annotate<br/>all fields]
+    G --> I["Always annotate\nall fields"]
     H --> I
     
-    I --> J[@Id for keys]
-    I --> K[@Column for attributes]
+    I --> J["@Id for keys"]
+    I --> K["@Column for attributes"]
 ```
 
 ---

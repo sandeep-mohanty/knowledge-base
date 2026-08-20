@@ -496,17 +496,17 @@ def process_order(order_id: str, user_id: int) -> Dict[str, Any]:
 ```mermaid
 flowchart TD
     Logs[Application Logs] --> Collection[Log Collection]
-    Collection --> Agent[Log Agent<br/>(Fluentd, Vector)]
-    Agent --> Buffer[Buffer/Queue<br/>(Kafka, Redis)]
+    Collection --> Agent["Log Agent\n(Fluentd, Vector)"]
+    Agent --> Buffer["Buffer/Queue\n(Kafka, Redis)"]
     Buffer --> Processing[Processing Layer]
     
     Processing --> Filter[Filter & Parse]
     Filter --> Enrich[Enrich with Metadata]
     Enrich --> Store[Storage Backend]
     
-    Store --> Hot[Hot Storage<br/>(Last 7 days)<br/>Elasticsearch]
-    Store --> Warm[Warm Storage<br/>(7-30 days)<br/>S3/Cheaper]
-    Store --> Cold[Cold Storage<br/>(30+ days)<br/>Glacier/Archive]
+    Store --> Hot["Hot Storage\n(Last 7 days)\nElasticsearch"]
+    Store --> Warm["Warm Storage\n(7-30 days)\nS3/Cheaper"]
+    Store --> Cold["Cold Storage\n(30+ days)\nGlacier/Archive"]
     
     Hot --> Query[Query Layer]
     Query --> UI[Grafana/Loki UI]
@@ -1280,16 +1280,16 @@ Historically, every observability vendor (Datadog, New Relic, Honeycomb) had its
 ```mermaid
 flowchart LR
     subgraph App["Your Application"]
-        Code[App Code] --> SDK["OpenTelemetry SDK<br/>(auto + manual instrumentation)"]
-        SDK --> Resources[Resource<br/>(service.name, version, env)]
+        Code[App Code] --> SDK["OpenTelemetry SDK\n(auto + manual instrumentation)"]
+        SDK --> Resources["Resource\n(service.name, version, env)"]
     end
 
-    SDK --> Collector["OpenTelemetry Collector<br/>(receives, processes, batches)"]
+    SDK --> Collector["OpenTelemetry Collector\n(receives, processes, batches)"]
     
-    Collector -->|metrics| Prometheus["Prometheus<br/>(metrics storage)"]
-    Collector -->|traces| Tempo["Grafana Tempo<br/>(trace storage)"]
-    Collector -->|logs| Loki["Grafana Loki<br/>(log storage)"]
-    Collector -->|any| Vendor["Datadog / New Relic<br/>(any vendor)"]
+    Collector -->|metrics| Prometheus["Prometheus\n(metrics storage)"]
+    Collector -->|traces| Tempo["Grafana Tempo\n(trace storage)"]
+    Collector -->|logs| Loki["Grafana Loki\n(log storage)"]
+    Collector -->|any| Vendor["Datadog / New Relic\n(any vendor)"]
     
     Prometheus --> Viz[Grafana]
     Tempo --> Viz

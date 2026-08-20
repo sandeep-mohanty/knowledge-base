@@ -7,9 +7,6 @@
 ### Introduction
 Most developers think `await` is about threads. **It is not.**
 
-If you’re not a member, **I’ve got you covered!** ❤  
-If you enjoy it, consider **clapping, subscribing, or buying me a coffee** to show your support! ❤
-
 `await` is primarily about **continuations**: what happens after an asynchronous operation completes. Once you understand that, the next question becomes far more important:
 *   Where does the continuation run?
 *   What state follows the continuation?
