@@ -1700,6 +1700,7 @@ aligns with our Q3 accessibility initiative.
 ### Answers Key
 
 **Beginner Answers:**
+
 1. Prompting conversationally with no written plan, spec, or tests; accepting whatever comes back.
 2. It adds a checkpoint: the AI must show a plan before touching files.
 3. RED (tests fail), writing code, GREEN (tests pass).
@@ -1717,6 +1718,7 @@ aligns with our Q3 accessibility initiative.
 15. Write findings to a file, /clear the session, restart from the document to avoid context rot.
 
 **Intermediate Answers:**
+
 16. Because the workflow structure (boundaries) determines outcomes more than prompt wording alone.
 17. The artifact changes: chat → plan → tests → spec → role docs → ticket → machine contract.
 18. Because a bad plan is a one-line correction; a bad diff is 20 minutes of unwinding.
@@ -1739,6 +1741,7 @@ aligns with our Q3 accessibility initiative.
 35. Ask for a plan before code exists, every time — costs 30 seconds, prevents rework.
 
 **Advanced Answers:**
+
 36. It centralizes rules so you don't restate them every session — one source of truth.
 37. Specs are versioned in git; Document & Clear prevents context rot within a session.
 38. It has multiple independent components (agents) passing messages, with synchronization needs.

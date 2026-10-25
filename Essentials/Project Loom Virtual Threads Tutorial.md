@@ -830,11 +830,11 @@ quadrantChart
     quadrant-3 Best of both worlds
     quadrant-4 Not recommended
 
-    Platform Threads (I/O-bound): [0.2, 0.5]
-    Reactive WebFlux: [0.85, 0.85]
-    Virtual Threads (I/O-bound): [0.88, 0.2]
-    Platform Thread Pool (CPU-bound): [0.4, 0.3]
-    Virtual Threads (CPU-bound): [0.45, 0.2]
+    "Platform Threads I/O-bound": [0.2, 0.5]
+    "Reactive WebFlux": [0.85, 0.85]
+    "Virtual Threads I/O-bound": [0.88, 0.2]
+    "Platform Thread Pool CPU-bound": [0.4, 0.3]
+    "Virtual Threads CPU-bound": [0.45, 0.2]
 ```
 
 ### Detailed Comparison Table

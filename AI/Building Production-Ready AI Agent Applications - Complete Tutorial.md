@@ -239,7 +239,7 @@ class CustomerSupportAgent:
 graph TB
     subgraph "AI Agent Architecture"
         A[User Input] --> B[Perception Layer]
-        B --> C[Reasoning Engine<br/>(LLM)]
+        B --> C["Reasoning Engine<br/>(LLM)"]
         C --> D[Planning Module]
         D --> E[Tool Selection]
         E --> F[Action Execution]
